@@ -1,0 +1,46 @@
+
+.action-bar {
+  z-index: 5000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 10px;
+}
+
+.btn-spring {
+  background-color: transparent;
+  border: 1px solid #B4F9A5;
+
+  &.active {
+    background-color: #B4F9A5;
+  }
+}
+
+.btn-summer {
+  background-color: transparent;
+  border: 1px solid #F3BC2E;
+
+  &.active {
+    background-color: #F3BC2E;
+  }
+}
+
+.btn-autumn {
+  background-color: transparent;
+  border: 1px solid #D45B12;
+
+  &.active {
+    background-color: #D45B12;
+  }
+}
+
+.btn-winter {
+  background-color: transparent;
+  border: 1px solid #B3DAF1;
+
+  &.active {
+    background-color: #B3DAF1;
+  }
+}

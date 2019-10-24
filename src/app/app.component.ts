@@ -11,6 +11,10 @@ import { GraphCreator } from "./graph-creator";
 })
 export class AppComponent implements OnInit {
 
+  public settings = {
+    season: "summer"
+  };
+
   public ngOnInit() {
 
     const docEl = document.documentElement;
@@ -20,12 +24,12 @@ export class AppComponent implements OnInit {
     const height = window.innerHeight || docEl.clientHeight || bodyEl.clientHeight;
 
     const xLoc = width / 2 - 25;
-    const yLoc = 100;
+    const yLoc = 200;
 
     // initial node data
     const nodes = [
-      {title: "new concept", id: 0, x: xLoc, y: yLoc},
-      {title: "new concept", id: 1, x: xLoc, y: yLoc + 200},
+      {title: "Clearing", id: 0, x: xLoc, y: yLoc},
+      {title: "Clearing", id: 1, x: xLoc, y: yLoc + 200},
     ];
 
     const edges = [
@@ -38,6 +42,10 @@ export class AppComponent implements OnInit {
 
     const graph = new GraphCreator(svg);
     graph.loadGraph(nodes, edges);
+  }
+
+  public changeSeason(season) {
+    this.settings.season = season;
   }
 
 }

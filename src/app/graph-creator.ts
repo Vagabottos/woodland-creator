@@ -1,6 +1,15 @@
 
 import * as d3 from "d3";
 
+/*
+Controls:
+- drag/scroll to pan/zoom
+- shift click to create a node
+- shift click and drag from a node to another node to make a link
+- shift click a node to change its title
+- click a node or edge then hit backspace to remove
+*/
+
 export interface INode {
   title: string;
   id: number;
@@ -119,7 +128,6 @@ export class GraphCreator {
         if (this.state.shiftNodeDrag) {
           this.dragEnd(d3.select(nodes[i]), this.state.mouseEnterNode);
         }
-
       });
   }
 
@@ -415,7 +423,7 @@ export class GraphCreator {
     } else if (this.state.graphMouseDown && d3.event.shiftKey) {
       // clicked not dragged from svg
       const xycoords = d3.mouse(this.svgG.node());
-      const d = { id: this.idct++, title: "new concept", x: xycoords[0], y: xycoords[1] };
+      const d = { id: this.idct++, title: "Clearing", x: xycoords[0], y: xycoords[1] };
       this.nodes.push(d);
       this.updateGraph();
       // make title of text immediently editable

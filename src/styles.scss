@@ -1,4 +1,43 @@
-/* You can add global styles to this file, and also import other style files */
+
+@font-face {
+  font-family: "Libre Baskerville";
+  src: url("/assets/fonts/LibreBaskerville-Regular.eot");
+  src: url("/assets/fonts/LibreBaskerville-Regular.eot?#iefix") format('embedded-opentype'),
+       url("/assets/fonts/LibreBaskerville-Regular.woff2") format('woff2'),
+       url("/assets/fonts/LibreBaskerville-Regular.woff") format('woff'),
+       url("/assets/fonts/LibreBaskerville-Regular.ttf") format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* italic */
+@font-face {
+  font-family: "Libre Baskerville";
+  src: url("/assets/fonts/LibreBaskerville-Italic.eot");
+  src: url("/assets/fonts/LibreBaskerville-Italic.eot?#iefix") format('embedded-opentype'),
+       url("/assets/fonts/LibreBaskerville-Italic.woff2") format('woff2'),
+       url("/assets/fonts/LibreBaskerville-Italic.woff") format('woff'),
+       url("/assets/fonts/LibreBaskerville-Italic.ttf") format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* bold */
+@font-face {
+  font-family: "Libre Baskerville";
+  src: url("/assets/fonts/LibreBaskerville-Bold.eot");
+  src: url("/assets/fonts/LibreBaskerville-Bold.eot?#iefix") format('embedded-opentype'),
+       url("/assets/fonts/LibreBaskerville-Bold.woff2") format('woff2'),
+       url("/assets/fonts/LibreBaskerville-Bold.woff") format('woff'),
+       url("/assets/fonts/LibreBaskerville-Bold.ttf") format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+* {
+  font-family: "Libre Baskerville", serif;
+}
+
 body {
   margin: 0;
   padding: 0;

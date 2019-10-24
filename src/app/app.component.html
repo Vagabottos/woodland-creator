@@ -1,6 +1,12 @@
 
 <div class="action-bar">
-  
+  <div class="btn-group">
+    <button *ngFor="let season of ['Spring', 'Summer', 'Autumn', 'Winter']"
+            class="btn"
+            [ngClass]="['btn-' + season.toLowerCase()]" 
+            [class.active]="settings.season === season.toLowerCase()" 
+            (click)="changeSeason(season.toLowerCase())">{{ season }}</button>
+  </div>
 </div>
 
 <div class="map-editor"></div>
