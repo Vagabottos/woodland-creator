@@ -1,11 +1,26 @@
 
 <div class="action-bar">
-  <div class="btn-group">
-    <button *ngFor="let season of ['Spring', 'Summer', 'Autumn', 'Winter']"
-            class="btn"
-            [ngClass]="['btn-' + season.toLowerCase()]" 
-            [class.active]="settings.season === season.toLowerCase()" 
-            (click)="changeSeason(season.toLowerCase())">{{ season }}</button>
+  <div class="actions">
+    <div class="btn-group left">
+      <button *ngFor="let season of ['Spring', 'Summer', 'Autumn', 'Winter']"
+              class="btn"
+              [ngClass]="['btn-' + season.toLowerCase()]" 
+              [class.active]="settings.season === season.toLowerCase()" 
+              (click)="changeSeason(season.toLowerCase())">{{ season }}</button>
+    </div>
+  
+    <div class="right">
+      <input type="file" class="hidden" #mapUpload (change)="load($event)" />
+
+      <div ngbDropdown class="d-inline-block">
+        <button class="btn btn-outline-primary" ngbDropdownToggle>Actions</button>
+        <div ngbDropdownMenu>
+          <button ngbDropdownItem (click)="save()">Save</button>
+          <button ngbDropdownItem (click)="mapUpload.click()">Load</button>
+          <button ngbDropdownItem (click)="reset()">Reset</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

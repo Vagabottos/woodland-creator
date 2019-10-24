@@ -7,6 +7,20 @@
   right: 0;
   width: 100%;
   padding: 10px;
+
+  .actions {
+    position: relative;
+
+    .left {
+      position: absolute;
+      left: 0;
+    }
+    
+    .right {
+      position: absolute;
+      right: 0;
+    }
+  }
 }
 
 .btn-spring {

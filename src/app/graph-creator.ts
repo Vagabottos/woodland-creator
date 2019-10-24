@@ -60,6 +60,10 @@ export class GraphCreator {
 
   private drag: d3.drag;
 
+  public get graph() {
+    return { nodes: this.nodes, edges: this.edges };
+  }
+
   constructor(private svg, private nodes: INode[] = [], private edges: IEdge[] = []) {
     this.init();
   }
@@ -70,6 +74,10 @@ export class GraphCreator {
 
     this.setIdCt(Math.max(...nodes.map((x) => x.id)) + 1);
     this.updateGraph();
+  }
+
+  public resetGraph() {
+    this.deleteGraph();
   }
 
   private init() {
@@ -199,16 +207,10 @@ export class GraphCreator {
     }
   }
 
-  private deleteGraph(skipPrompt?) {
-    let doDelete = true;
-    if (!skipPrompt) {
-        doDelete = window.confirm("Press OK to delete this graph");
-    }
-    if (doDelete) {
-        this.nodes = [];
-        this.edges = [];
-        this.updateGraph();
-    }
+  private deleteGraph() {
+    this.nodes = [];
+    this.edges = [];
+    this.updateGraph();
   }
 
   private selectElementContents(el) {

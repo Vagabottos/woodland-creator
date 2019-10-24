@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 
 import * as d3 from "d3";
+import { saveAs } from "file-saver";
 
 import { GraphCreator } from "./graph-creator";
 
@@ -12,8 +13,10 @@ import { GraphCreator } from "./graph-creator";
 export class AppComponent implements OnInit {
 
   public settings = {
-    season: "summer"
+    season: "summer",
   };
+
+  private graph: GraphCreator;
 
   public ngOnInit() {
 
@@ -40,8 +43,57 @@ export class AppComponent implements OnInit {
       .attr("width", width)
       .attr("height", height);
 
-    const graph = new GraphCreator(svg);
-    graph.loadGraph(nodes, edges);
+    this.graph = new GraphCreator(svg);
+    this.graph.loadGraph(nodes, edges);
+  }
+
+  public save() {
+    const state = {
+      map: this.graph.graph,
+      settings: this.settings,
+      version: 1,
+    };
+
+    const blob = new Blob([JSON.stringify(state, null, 4)], { type: "text/plain;charset=utf-8" });
+    saveAs(blob, `rootmap-${Date.now()}.json`);
+  }
+
+  public load($event) {
+    const file = $event.target.files[0];
+    if (!file) { return; }
+
+    const reader = new FileReader();
+
+    reader.onloadend = (e) => {
+      try {
+        const { settings, map } = JSON.parse(reader.result as string);
+        this.settings = Object.assign({}, this.settings, settings);
+
+        map.edges = map.edges.map((e) => {
+          return {
+            source: map.nodes.find((x) => x.id === e.source.id),
+            target: map.nodes.find((x) => x.id === e.target.id),
+          };
+        });
+
+        this.graph.resetGraph();
+        this.graph.loadGraph(map.nodes, map.edges);
+
+        $event.target.value = "";
+
+      } catch (e) {
+        alert("Could not parse map file.");
+      }
+    };
+
+    reader.readAsText(file);
+  }
+
+  public reset() {
+    const shouldReset = confirm("Are you sure you want to reset your current map?");
+    if (!shouldReset) { return; }
+
+    this.graph.resetGraph();
   }
 
   public changeSeason(season) {
