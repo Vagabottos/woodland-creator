@@ -3,7 +3,8 @@ import { Component, OnInit } from "@angular/core";
 import * as d3 from "d3";
 import { saveAs } from "file-saver";
 
-import { GraphCreator } from "./graph-creator";
+import { GraphCreator, IEdge, INode } from "./graph-creator";
+import { generateLayout } from "./layout-generator";
 
 @Component({
   selector: "app-root",
@@ -26,18 +27,8 @@ export class AppComponent implements OnInit {
     const width = window.innerWidth || docEl.clientWidth || bodyEl.clientWidth;
     const height = window.innerHeight || docEl.clientHeight || bodyEl.clientHeight;
 
-    const xLoc = width / 2 - 25;
-    const yLoc = 200;
-
     // initial node data
-    const nodes = [
-      {title: "Clearing", id: 0, x: xLoc, y: yLoc},
-      {title: "Clearing", id: 1, x: xLoc, y: yLoc + 200},
-    ];
-
-    const edges = [
-      {source: nodes[1], target: nodes[0]},
-    ];
+    const { nodes, edges } = this.generateLayout(width, height);
 
     const svg = d3.select(".map-editor").append("svg")
       .attr("width", width)
@@ -45,6 +36,10 @@ export class AppComponent implements OnInit {
 
     this.graph = new GraphCreator(svg);
     this.graph.loadGraph(nodes, edges);
+  }
+
+  public generateLayout(width, height): { nodes: INode[], edges: IEdge[] } {
+    return generateLayout(width, height);
   }
 
   public save() {
