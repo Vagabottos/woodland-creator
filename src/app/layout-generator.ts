@@ -28,7 +28,7 @@ export const generateLayout = (width: number, height: number): { nodes: INode[],
   const edges = [];
 
   nodes.forEach((node) => {
-    const numPaths = 2;
+    const numPaths = 1;
 
     const validTargetNodes = nodes.filter((checkNode) => {
       if (checkNode === node) { return false; }
@@ -42,7 +42,7 @@ export const generateLayout = (width: number, height: number): { nodes: INode[],
 
       const dist = distBetweenNodes(node._genXPos, node._genYPos, checkNode._genXPos, checkNode._genYPos);
 
-      if (dist > 1.5) { return false; }
+      if (dist > 1) { return false; }
 
       return true;
     });
