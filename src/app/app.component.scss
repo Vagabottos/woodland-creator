@@ -58,3 +58,20 @@
     background-color: #B3DAF1;
   }
 }
+
+.hotkeys {
+  position: absolute;
+  z-index: 100;
+  bottom: 0;
+  left: 0;
+
+  font-size: 0.8rem;
+  background-color: #fff;
+  border: 1px solid #000;
+  padding: 5px;
+
+  ul {
+    padding-left: 20px;
+    margin-bottom: 0;
+  }
+}
