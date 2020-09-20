@@ -23,8 +23,11 @@
   }
 }
 
+.btn-spring, .btn-summer, .btn-autumn, .btn-winter {
+  background-color: #fff;
+}
+
 .btn-spring {
-  background-color: transparent;
   border: 1px solid #B4F9A5;
 
   &.active {
@@ -33,7 +36,6 @@
 }
 
 .btn-summer {
-  background-color: transparent;
   border: 1px solid #F3BC2E;
 
   &.active {
@@ -42,7 +44,6 @@
 }
 
 .btn-autumn {
-  background-color: transparent;
   border: 1px solid #D45B12;
 
   &.active {
@@ -51,7 +52,6 @@
 }
 
 .btn-winter {
-  background-color: transparent;
   border: 1px solid #B3DAF1;
 
   &.active {
