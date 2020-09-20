@@ -460,9 +460,8 @@ export class GraphCreator {
 
     // update existing nodes
     const circles = this.circles.data(this.nodes, (d) => d.id);
-    console.log(this.nodes);
+
     // remove old nodes
-    
     this.svg.selectAll(".conceptG circle").remove();
     this.svg.selectAll(".conceptG text").remove();
 
