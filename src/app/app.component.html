@@ -13,11 +13,45 @@
       <input type="file" class="hidden" #mapUpload (change)="load($event)" />
 
       <div ngbDropdown class="d-inline-block">
-        <button class="btn btn-outline-primary" ngbDropdownToggle>Actions</button>
-        <div ngbDropdownMenu>
+        <button class="btn btn-outline-primary" ngbDropdownToggle>Menu</button>
+        <div ngbDropdownMenu class="app-menu">
+
+          <button ngbDropdownItem disabled class="divider">Actions</button>
+          <div class="dropdown-divider"></div>
           <button ngbDropdownItem (click)="save()">Save</button>
           <button ngbDropdownItem (click)="mapUpload.click()">Load</button>
-          <button ngbDropdownItem (click)="reset()">Reset</button>
+          <button ngbDropdownItem (click)="randomize()">Randomize</button>
+          <button ngbDropdownItem (click)="reset()">Clear Map</button>
+          
+          <div class="dropdown-divider"></div>
+          <button ngbDropdownItem disabled class="divider">Settings</button>
+          <div class="dropdown-divider"></div>
+          <form class="px-4">
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="townNames" [ngModelOptions]="{ standalone: true }" [(ngModel)]="settings.townNames" (ngModelChange)="saveSettings()">
+              <label class="form-check-label" for="townNames">
+                Fancy Town Names
+              </label>
+            </div>
+            <div class="form-group my-1">
+              <button class="btn btn-sm btn-inline btn-info" [disabled]="settings.minConnections <= 1" (click)="changeMinConnections(-1)">-</button>
+              &nbsp;
+              <label class="form-check-label">
+                Min. Connections: {{ settings.minConnections }}
+              </label>
+              &nbsp;
+              <button class="btn btn-sm btn-inline btn-info" [disabled]="settings.minConnections >= 5 || settings.minConnections === settings.maxConnections" (click)="changeMinConnections(1)">+</button>
+            </div>
+            <div class="form-group my-1">
+              <button class="btn btn-sm btn-inline btn-info" [disabled]="settings.maxConnections <= 1 || settings.minConnections === settings.maxConnections" (click)="changeMaxConnections(-1)">-</button>
+              &nbsp;
+              <label class="form-check-label">
+                Max. Connections: {{ settings.maxConnections }}
+              </label>
+              &nbsp;
+              <button class="btn btn-sm btn-inline btn-info" [disabled]="settings.maxConnections >= 5" (click)="changeMaxConnections(1)">+</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -33,4 +67,8 @@
     <li>Shift+Click+Drag (Clearing to Clearing) - Connect Clearings</li>
     <li>Click+Backspace (Path or Clearing) - Remove Path or Clearing</li>
   </ul>
+</div>
+
+<div class="error text-danger" *ngIf="error">
+  {{ error }} <button class="btn btn-sm btn-danger" (click)="error = ''">Close</button>
 </div>

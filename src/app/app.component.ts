@@ -2,9 +2,19 @@ import { Component, OnInit } from "@angular/core";
 
 import * as d3 from "d3";
 import { saveAs } from "file-saver";
+import { clamp } from "lodash";
 
-import { GraphCreator, IEdge, INode } from "./graph-creator";
+import { GraphCreator } from "./graph-creator";
+import { ISettings, Season } from "./interfaces";
 import { generateLayout } from "./layout-generator";
+
+const DEFAULT_SETTINGS = {
+  maxAttempts: 100,
+  maxConnections: 3,
+  minConnections: 2,
+  season: "summer" as Season,
+  townNames: true,
+};
 
 @Component({
   selector: "app-root",
@@ -13,39 +23,23 @@ import { generateLayout } from "./layout-generator";
 })
 export class AppComponent implements OnInit {
 
-  public settings = {
-    season: "summer",
-  };
+  public settings: ISettings = Object.assign({}, DEFAULT_SETTINGS);
+
+  public error: string;
 
   private graph: GraphCreator;
 
   public ngOnInit() {
-
-    const docEl = document.documentElement;
-    const bodyEl = document.getElementsByTagName("body")[0];
-
-    const width = window.innerWidth || docEl.clientWidth || bodyEl.clientWidth;
-    const height = window.innerHeight || docEl.clientHeight || bodyEl.clientHeight;
-
-    // initial node data
-    const { nodes, edges } = this.generateLayout(width, height);
-
-    const svg = d3.select(".map-editor").append("svg")
-      .attr("width", width)
-      .attr("height", height);
-
-    this.graph = new GraphCreator(svg);
-    this.graph.loadGraph(nodes, edges);
-  }
-
-  public generateLayout(width, height): { nodes: INode[], edges: IEdge[] } {
-    return generateLayout(width, height);
+    this.loadSettings();
+    this.randomize();
   }
 
   public save() {
+
     const state = {
       map: this.graph.graph,
       settings: this.settings,
+      size: this.getWidthHeightOfScreen(),
       version: 1,
     };
 
@@ -61,7 +55,7 @@ export class AppComponent implements OnInit {
 
     reader.onloadend = (e) => {
       try {
-        const { settings, map } = JSON.parse(reader.result as string);
+        const { settings, map, size } = JSON.parse(reader.result as string);
         this.settings = Object.assign({}, this.settings, settings);
 
         map.edges = map.edges.map((e) => {
@@ -69,6 +63,16 @@ export class AppComponent implements OnInit {
             source: map.nodes.find((x) => x.id === e.source.id),
             target: map.nodes.find((x) => x.id === e.target.id),
           };
+        });
+
+        const mySize = this.getWidthHeightOfScreen();
+
+        const xProp = mySize.width / size.width;
+        const yProp = mySize.height / size.height;
+
+        map.nodes.forEach((node) => {
+          node.x *= xProp;
+          node.y *= yProp;
         });
 
         this.graph.resetGraph();
@@ -91,8 +95,60 @@ export class AppComponent implements OnInit {
     this.graph.resetGraph();
   }
 
-  public changeSeason(season) {
+  public changeSeason(season: Season) {
     this.settings.season = season;
+    this.saveSettings();
+  }
+
+  public changeMinConnections(mod: number) {
+    this.settings.minConnections = clamp(1, this.settings.minConnections + mod, this.settings.maxConnections);
+    this.saveSettings();
+  }
+
+  public changeMaxConnections(mod: number) {
+    this.settings.maxConnections = clamp(this.settings.minConnections, this.settings.maxConnections + mod, 5);
+    this.saveSettings();
+  }
+
+  public loadSettings() {
+    try {
+      this.settings = JSON.parse(localStorage.getItem("settings")) || Object.assign({}, DEFAULT_SETTINGS);
+    } catch {
+      this.settings = Object.assign({}, DEFAULT_SETTINGS);
+    }
+  }
+
+  public saveSettings() {
+    localStorage.setItem("settings", JSON.stringify(this.settings));
+  }
+
+  public getWidthHeightOfScreen() {
+    const docEl = document.documentElement;
+    const bodyEl = document.getElementsByTagName("body")[0];
+
+    const width = window.innerWidth || docEl.clientWidth || bodyEl.clientWidth;
+    const height = window.innerHeight || docEl.clientHeight || bodyEl.clientHeight;
+
+    return { width, height };
+  }
+
+  public randomize() {
+
+    document.querySelectorAll("svg").forEach((svg) => svg.remove());
+
+    const { width, height } = this.getWidthHeightOfScreen();
+
+    // initial node data
+    const { nodes, edges, error } = generateLayout(width, height, this.settings);
+
+    this.error = error;
+
+    const svg = d3.select(".map-editor").append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    this.graph = new GraphCreator(svg);
+    this.graph.loadGraph(nodes, edges);
   }
 
 }

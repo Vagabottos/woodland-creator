@@ -220,6 +220,13 @@ export class GraphCreator {
     const nwords = words.length;
     const el = gEl.append("text")
       .attr("text-anchor", "middle")
+      .attr("font-size", (d) => {
+        const len = d.title.substring(0, d.r / 3).length;
+        let size = d.r / 3;
+        size *= 7 / len;
+        size += 1;
+        return Math.round(size) + "px";
+      })
       .attr("dy", "-" + (nwords - 1) * 7.5);
 
     for (let i = 0; i < words.length; i++) {

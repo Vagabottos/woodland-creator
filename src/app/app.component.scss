@@ -75,3 +75,20 @@
     margin-bottom: 0;
   }
 }
+
+.error {
+  position: absolute;
+  z-index: 100;
+  bottom: 0;
+  right: 0;
+
+  padding: 5px;
+}
+
+.app-menu {
+  width: 20rem;
+
+  form div {
+    cursor: pointer;
+  }
+}

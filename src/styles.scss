@@ -48,7 +48,7 @@ body {
   pointer-events: none;
 }
 
-marker{
+marker {
   fill: #333;
 }
 
@@ -99,4 +99,17 @@ path.link.selected {
 
 text {
   user-select: none;
+}
+
+.form-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-inline {
+  max-height: 20px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
