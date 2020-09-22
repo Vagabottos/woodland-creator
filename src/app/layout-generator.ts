@@ -21,13 +21,16 @@ export function generateLayout(width: number, height: number, settings: ISetting
 
   const layout = sample(potentialLayouts);
 
+  const flipX = sample([true, false]);
+  const flipY = sample([true, false]);
+
   layout.nodePositions.forEach((pos, i) => {
     nodes.push({
       id: i,
       r: 50,
       title: townNames ? capitalize(randomTownName()) : "Clearing" + i,
-      x: pos.x * (width / layout.maxX),
-      y: pos.y * (height / layout.maxY),
+      x: (flipX ? layout.maxX - pos.x : pos.x) * (width / layout.maxX),
+      y: (flipY ? layout.maxY - pos.y : pos.y) * (height / layout.maxY),
     });
   });
 
