@@ -25,10 +25,14 @@ export function generateLayout(width: number, height: number, settings: ISetting
   const flipY = sample([true, false]);
 
   const nodeOrdering = shuffle(["bunny", "mouse", "fox"]);
-  const owners = ["eyrie", "marquise", "woodland"];
+  const owners = [];
+
+  if (settings.spawnEyrie)    { owners.push("eyrie"); }
+  if (settings.spawnMarquise) { owners.push("marquise"); }
+  if (settings.spawnWoodland) { owners.push("woodland"); }
 
   layout.nodePositions.forEach((pos, i) => {
-    const owner = i < 3 ? owners[i] : sample(owners);
+    const owner = i < owners.length ? owners[i] : sample(owners);
     nodes.push({
       id: i,
       majority: owner,

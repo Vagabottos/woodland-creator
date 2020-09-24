@@ -13,6 +13,9 @@ const DEFAULT_SETTINGS = {
   maxConnections: 3,
   minConnections: 2,
   season: "summer" as Season,
+  spawnEyrie: true,
+  spawnMarquise: true,
+  spawnWoodland: true,
   townNames: true,
 };
 

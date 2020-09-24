@@ -6,5 +6,8 @@ export interface ISettings {
   minConnections: number;
   maxConnections: number;
   maxAttempts: number;
+  spawnEyrie: boolean;
+  spawnMarquise: boolean;
+  spawnWoodland: boolean;
   townNames: boolean;
 }

@@ -51,6 +51,24 @@
               &nbsp;
               <button class="btn btn-sm btn-inline btn-info" [disabled]="settings.maxConnections >= 5" (click)="changeMaxConnections(1)">+</button>
             </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="spawnMarquise" [ngModelOptions]="{ standalone: true }" [(ngModel)]="settings.spawnMarquise" (ngModelChange)="saveSettings()">
+              <label class="form-check-label" for="spawnMarquise">
+                Spawn Marquise <img class="inline-icon" src="assets/symbol/faction-marquise.png" />
+              </label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="spawnEyrie" [ngModelOptions]="{ standalone: true }" [(ngModel)]="settings.spawnEyrie" (ngModelChange)="saveSettings()">
+              <label class="form-check-label" for="spawnEyrie">
+                Spawn Eyrie <img class="inline-icon" src="assets/symbol/faction-eyrie.png" />
+              </label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="spawnWoodland" [ngModelOptions]="{ standalone: true }" [(ngModel)]="settings.spawnWoodland" (ngModelChange)="saveSettings()">
+              <label class="form-check-label" for="spawnWoodland">
+                Spawn Woodland <img class="inline-icon" src="assets/symbol/faction-woodland.png" />
+              </label>
+            </div>
           </form>
         </div>
       </div>
