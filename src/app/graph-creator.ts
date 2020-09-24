@@ -382,7 +382,14 @@ export class GraphCreator {
     } else if (this.state.graphMouseDown && event.shiftKey) {
       // clicked not dragged from svg
       const xycoords = d3.pointer(event, this.svgG.node());
-      const d = { id: this.idct++, title: "New Clearing", x: xycoords[0], y: xycoords[1] };
+      const d = {
+        id: this.idct++,
+        suit: "fox",
+        title: "New Clearing",
+        x: xycoords[0],
+        y: xycoords[1],
+      };
+
       this.nodes.push(d);
       this.updateGraph();
 
@@ -471,6 +478,7 @@ export class GraphCreator {
     // remove old nodes
     this.svg.selectAll(".conceptG circle").remove();
     this.svg.selectAll(".conceptG text").remove();
+    this.svg.selectAll(".conceptG image").remove();
 
     // add new nodes
     const newGs = circles
@@ -500,11 +508,52 @@ export class GraphCreator {
         this.circleMouseUp(event, d3.select(event.currentTarget), d);
       })
       .each((d, i, nodes) => {
-        d3.select(nodes[i])
+        const node = d3.select(nodes[i]);
+        node
           .append("circle")
           .attr("r", String(GraphConstants.nodeRadius));
 
         this.insertTitleLinebreaks(d3.select(nodes[i]), d.title);
+
+        node
+          .append("svg:image")
+          .attr("x", -10)
+          .attr("y", -45)
+          .attr("width", 20)
+          .attr("height", 24)
+          .attr("xlink:href", (d) => `assets/symbol/card-${d.suit}.png`)
+          .on("click", (event, d) => {
+            this.changeClearingSuit(event, d3.select(event.currentTarget), d, "forward");
+          })
+          .on("contextmenu", (event, d) => {
+            this.changeClearingSuit(event, d3.select(event.currentTarget), d, "reverse");
+          });
+
+        if (d.majority) {
+          node
+            .append("svg:image")
+            .attr("x", -24)
+            .attr("y", 8)
+            .attr("width", 20)
+            .attr("height", 24)
+            .attr("xlink:href", `assets/symbol/faction-${d.majority}.png`)
+            .on("click", (event, d) => {
+              this.changeClearingMajority(event, d3.select(event.currentTarget), d, "forward");
+            })
+            .on("contextmenu", (event, d) => {
+              this.changeClearingMajority(event, d3.select(event.currentTarget), d, "reverse");
+            });
+
+          if (d.submajority) {
+            node
+              .append("svg:image")
+              .attr("x", 4)
+              .attr("y", 8)
+              .attr("width", 20)
+              .attr("height", 24)
+              .attr("xlink:href", `assets/symbol/token-${d.submajority}.png`);
+          }
+        }
       });
 
     this.circles = newGs;
@@ -515,6 +564,63 @@ export class GraphCreator {
     if (!newName) { return; }
 
     d.title = newName;
+    this.updateGraph();
+  }
+
+  private changeClearingSuit(event, d3node, d, direction: "forward"|"reverse" = "forward") {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const forward = {
+      bunny: "mouse",
+      fox: "bunny",
+      mouse: "fox",
+    };
+
+    const reverse = {
+      bunny: "fox",
+      fox: "mouse",
+      mouse: "bunny",
+    };
+
+    d.suit = direction === "forward" ? forward[d.suit] : reverse[d.suit];
+
+    this.updateGraph();
+  }
+
+  private changeClearingMajority(event, d3node, d, direction: "forward"|"reverse" = "forward") {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const forward = {
+      eyrie: "woodland",
+      marquise: "eyrie",
+      woodland: "marquise",
+    };
+
+    const reverse = {
+      eyrie: "marquise",
+      marquise: "woodland",
+      woodland: "eyrie",
+    };
+
+    if (d.majority === "marquise" && !d.submajority && direction === "forward") {
+      d.submajority = "keep";
+
+    } else if (d.majority === "marquise" && d.submajority && direction === "reverse") {
+      d.submajority = "";
+
+    } else if (d.majority === "eyrie" && !d.submajority && direction === "forward") {
+      d.submajority = "roost";
+
+    } else if (d.majority === "eyrie" && d.submajority && direction === "reverse") {
+      d.submajority = "";
+
+    } else {
+      d.majority = direction === "forward" ? forward[d.majority] : reverse[d.majority];
+      d.submajority = "";
+    }
+
     this.updateGraph();
   }
 

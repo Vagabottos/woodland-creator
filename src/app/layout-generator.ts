@@ -24,15 +24,31 @@ export function generateLayout(width: number, height: number, settings: ISetting
   const flipX = sample([true, false]);
   const flipY = sample([true, false]);
 
+  const nodeOrdering = shuffle(["bunny", "mouse", "fox"]);
+  const owners = ["eyrie", "marquise", "woodland"];
+
   layout.nodePositions.forEach((pos, i) => {
+    const owner = i < 3 ? owners[i] : sample(owners);
     nodes.push({
       id: i,
+      majority: owner,
       r: 50,
+      suit: nodeOrdering[i % 3],
       title: townNames ? capitalize(randomTownName()) : "Clearing" + i,
       x: (flipX ? layout.maxX - pos.x : pos.x) * (width / layout.maxX),
       y: (flipY ? layout.maxY - pos.y : pos.y) * (height / layout.maxY),
     });
   });
+
+  const keepNode = sample(nodes.filter((n) => n.majority === "marquise"));
+  if (keepNode) {
+    keepNode.submajority = "keep";
+  }
+
+  const roostNode = sample(nodes.filter((n) => n.majority === "eyrie"));
+  if (roostNode) {
+    roostNode.submajority = "roost";
+  }
 
   const potentialEdges = {};
 
